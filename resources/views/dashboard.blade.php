@@ -6,6 +6,21 @@
     <title>@yield('title', 'Dashboard')</title>
 
     <!-- Bootstrap CSS from CDN -->
+    <style>
+        .menu-image {
+            height: 200px; /* Atur tinggi gambar */
+            object-fit: cover; /* Memastikan gambar terpotong dengan baik tanpa merusak rasio */
+        }
+        .contact-form-container {
+            max-width: 600px; /* Atur lebar maksimal form */
+            margin: auto; /* Memposisikan form di tengah */
+            padding: 2rem; /* Tambahkan padding untuk tampilan yang lebih baik */
+            background: rgba(255, 255, 255, 0.8); /* Background putih dengan transparansi */
+            border-radius: 8px; /* Membuat sudut yang lebih halus */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Menambahkan shadow untuk efek kedalaman */
+        }
+    </style>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 </head>
@@ -54,41 +69,107 @@
             <h1 class="text-success">Welcome to SIP & SAVOR</h1>
         </div>
         
-        <!-- Order Tab -->
-        <div class="tab-pane fade" id="order" role="tabpanel" aria-labelledby="order-tab">
-            <h2 class="text-success">Order Menu</h2>
-            <p>Select an item to place an order:</p>
+<!-- Order Tab -->
+<div class="tab-pane fade" id="order" role="tabpanel" aria-labelledby="order-tab">
+    <h2 class="text-success">Order Menu</h2>
 
-            <!-- Display Menu Items -->
-            <div class="row">
-                @foreach($menus as $menu)
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <img src="{{ asset($menu->foto) }}" class="card-img-top" alt="Menu Image">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $menu->nama }}</h5>
-                                <p class="card-text">{{ $menu->deskripsi }}</p>
-                                <p class="text-success fw-bold">Rp{{ $menu->harga }}</p>
-                                <a href="{{ route('orders.create', ['menuId' => $menu->id]) }}" class="btn btn-primary">Order</a>
-                            </div>
-                        </div>
+    <!-- Display Menu Items -->
+    <div class="row">
+        @foreach($menus as $menu)
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ asset($menu->foto) }}" class="card-img-top menu-image" alt="Menu Image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $menu->nama }}</h5>
+                        <p class="card-text">{{ $menu->deskripsi }}</p>
+                        <p class="text-success fw-bold">Rp{{ $menu->harga }}</p>
+
+                        <!-- Order Button -->
+                        <a href="{{ route('cart.store') }}" class="btn btn-primary" 
+                           onclick="event.preventDefault(); 
+                           document.getElementById('add-to-cart-form-{{ $menu->id }}').submit();">
+                           Order
+                        </a>
+
+                        <!-- Hidden Form for Adding to Cart -->
+                        <form id="add-to-cart-form-{{ $menu->id }}" action="{{ route('cart.store') }}" method="POST" style="display: none;">
+                            @csrf
+                            <input type="hidden" name="Nama_Makanan" value="{{ $menu->nama }}">
+                            <input type="hidden" name="Foto" value="{{ asset($menu->foto) }}">
+                            <input type="hidden" name="Harga" value="{{ $menu->harga }}">
+                            <input type="number" name="Pesanan" min="1" value="1" required>
+                        </form>
                     </div>
-                @endforeach
+                </div>
             </div>
-        </div>
+        @endforeach
+    </div>
+</div>
+
 
         <!-- Contact Tab -->
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            <h2 class="text-success">Contact Us</h2>
-            <p>Contact information goes here.</p>
+            <div class="contact-form-container mt-4">
+                <h2 class="text-success text-center">Contact Us</h2>
+
+                <!-- Display Success Message -->
+                @if(session('success'))
+                    <div class="alert alert-success text-center">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <!-- Contact Form -->
+                <form action="{{ route('contact.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Send</button>
+                </form>
+            </div>
         </div>
 
         <!-- Cart Tab -->
         <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
             <h2 class="text-success">Your Cart</h2>
-            <p>Items in your cart will be displayed here.</p>
+
+            @if($cartItems->isEmpty())
+                <p class="text-danger">Your cart is empty.</p>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nama Makanan</th>
+                                <th>Pesanan</th>
+                                <th>Harga</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($cartItems as $item)
+                                <tr>
+                                    <td>{{ $item->Nama_Makanan }}</td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>Rp{{ $item->Harga }}</td>
+                                    <td>Rp{{ $item->Harga * $item->quantity }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
-    </div>
 
     <!-- Bootstrap JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
