@@ -148,26 +148,41 @@
                         <p class="card-text">{{ $menu->deskripsi }}</p>
                         <p class="text-success fw-bold">Rp{{ $menu->harga }}</p>
 
+
+                        <!-- Quantity Input -->
+                    <label for="quantity-{{ $menu->id }}">Jumlah:</label>
+                    <input type="number" id="quantity-{{ $menu->id }}" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+
+
                         <!-- Order Button -->
                         <a href="{{ route('cart.store') }}" class="btn btn-primary" 
                            onclick="event.preventDefault(); 
                            document.getElementById('add-to-cart-form-{{ $menu->id }}').submit();">
                            Order
                         </a>
-
+                        
                         <!-- Hidden Form for Adding to Cart -->
-                        <!-- Form tersembunyi untuk menambahkan item ke cart -->
-<form id="add-to-cart-form-{{ $menu->id }}" action="{{ route('cart.store') }}" method="POST" style="display: none;">
-    @csrf
-    <input type="hidden" name="menu_id" value="{{ $menu->id }}">
-    <input type="hidden" name="quantity" value="1"> <!-- Ganti sesuai kebutuhan -->
-</form>
+                    <form id="add-to-cart-form-{{ $menu->id }}" action="{{ route('cart.store') }}" method="POST" style="display: none;">
+                        @csrf
+                        <input type="hidden" name="menu_id" value="{{ $menu->id }}">
+                        <!-- Passing the Quantity Value from the Input -->
+                        <input type="hidden" name="quantity" id="hidden-quantity-{{ $menu->id }}" value="1">
+                    </form>
 
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
+    <script>
+    // Script to update the hidden quantity input before submitting the form
+    document.querySelectorAll('input[name="quantity"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const menuId = this.id.split('-')[1];
+            document.getElementById('hidden-quantity-' + menuId).value = this.value;
+        });
+    });
+</script>
 </div>
 
         <!-- Contact Tab -->
@@ -217,6 +232,7 @@
                         <th>Pesanan</th>
                         <th>Harga</th>
                         <th>Subtotal</th>
+                        <th>Tanggal Pesanan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -226,6 +242,7 @@
                             <td>{{ $item->Pesanan }}</td> <!-- Sesuaikan dengan kolom di database -->
                             <td>Rp{{ number_format($item->harga, 0, ',', '.') }}</td> <!-- Menambahkan format angka -->
                             <td>Rp{{ number_format($item->harga * $item->Pesanan, 0, ',', '.') }}</td> <!-- Menambahkan format angka dan hitung subtotal -->
+                            <td>{{ $item->created_at->format('d-m-Y H:i:s') }}</td>
                         </tr>
                     @endforeach
                 </tbody>

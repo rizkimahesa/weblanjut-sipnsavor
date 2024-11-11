@@ -24,8 +24,12 @@ class CartController extends Controller
     return view('dashboard', compact('cartItems', 'menus')); // Kirimkan kedua variabel ke view
     }
 
+
+
+
     public function store(Request $request)
 {
+    
     // Validasi dan cek login
     if (!Auth::check()) {
         return redirect()->route('login')->with('error', 'You must be logged in to add items to the cart.');
@@ -36,11 +40,8 @@ class CartController extends Controller
         'menu_id' => 'required|exists:menus,id',
         'quantity' => 'required|integer|min:1',
     ]);
-
+    
     $menu = Menu::find($request->menu_id);
-
-    // Debugging: Periksa ID pengguna yang login
-      // Pastikan ID pengguna yang login valid
 
     // Cek apakah item sudah ada di cart
     $existingItem = Cart::where('nama', $menu->nama)
@@ -64,6 +65,10 @@ class CartController extends Controller
 
     return redirect()->route('cart.index')->with('success', 'Item added to cart!');
 }
+
+
+
+
 
     public function __construct()
     {

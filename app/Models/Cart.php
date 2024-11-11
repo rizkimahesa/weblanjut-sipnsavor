@@ -17,5 +17,6 @@ class Cart extends Model
         'harga',
         'Pesanan',
         'user_id',
+        'created_at'
     ];
 }
