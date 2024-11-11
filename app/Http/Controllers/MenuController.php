@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Menu;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
@@ -11,16 +12,23 @@ class MenuController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $menus = Menu::all();
-        return view('menus.index', compact('menus'));
-    }
+{
+    // Ambil semua data menu dari database
+    $menus = Menu::all();
 
+    // Kirim variabel $menus ke view
+    return view('menus.index', compact('menus'));
+}
+    
     public function dashboard()
     {
         $menus = Menu::all(); // Retrieve all menu items
         return view('dashboard', compact('menus'));
     }
+
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return view('menus.create');
@@ -30,32 +38,31 @@ class MenuController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'nama' => 'required',
-        'deskripsi' => 'required',
-        'harga' => 'required|numeric',
-        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate the photo
-    ]);
+    {
+        $request->validate([
+            'nama' => 'required',
+            'deskripsi' => 'required',
+            'harga' => 'required|numeric',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate the photo
+        ]);
 
-    $fotoPath = null; // Initialize photo path variable
+        $fotoPath = null;
 
-    if ($request->hasFile('foto')) {
-        $foto = $request->file('foto');
-        $filename = time() . '_' . $foto->getClientOriginalName(); // Generate a unique filename
-        $fotoPath = $foto->storeAs('images/Makanan', $filename, 'public'); // Store the image in the public disk
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $filename = time() . '_' . $foto->getClientOriginalName();
+            $fotoPath = $foto->storeAs('images/Makanan', $filename, 'public');
+        }
+
+        Menu::create([
+            'nama' => $request->input('nama'),
+            'deskripsi' => $request->input('deskripsi'),
+            'harga' => $request->input('harga'),
+            'foto' => $fotoPath,
+        ]);
+
+        return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan.');
     }
-
-    // Create menu item
-    Menu::create([
-        'nama' => $request->input('nama'),
-        'deskripsi' => $request->input('deskripsi'),
-        'harga' => $request->input('harga'),
-        'foto' => $fotoPath, // Save the path to the image
-    ]);
-
-    return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan.');
-}
 
     /**
      * Display the specified resource.
@@ -90,27 +97,33 @@ class MenuController extends Controller
         $menu->harga = $request->harga;
 
         if ($request->hasFile('foto')) {
-            // Delete the old photo if it exists
-            if ($menu->Makanan) {
-                unlink(public_path($menu->Makanan)); // Ensure the correct path to delete the old image
+            if ($menu->foto) {
+                Storage::disk('public')->delete($menu->foto); // Delete old photo
             }
     
             $foto = $request->file('foto');
             $filename = time() . '_' . $foto->getClientOriginalName();
-            $fotoPath = $foto->move('images/Makanan', $filename);
-            $menu->foto = 'images/Makanan/' . $filename; // Update the path to the photo
+            $fotoPath = $foto->storeAs('images/Makanan', $filename, 'public');
+            $menu->foto = $fotoPath;
         }
     
-        $menu->save(); // Save the updated menu item
+        $menu->save();
     
-        // Redirect back to the menu list with a success message
         return redirect()->route('menus.index')->with('success', 'Menu berhasil diperbarui.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Menu $menu)
     {
+        if ($menu->foto) {
+            Storage::disk('public')->delete($menu->foto); // Delete photo from storage
+        }
+
         $menu->delete();
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus.');
     }
+    
 }

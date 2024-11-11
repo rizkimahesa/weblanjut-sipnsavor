@@ -9,6 +9,7 @@ class Menu extends Model
 {
     use HasFactory;
 
+    // Define fillable attributes to prevent mass assignment errors
     protected $fillable = [
         'nama',
         'deskripsi',

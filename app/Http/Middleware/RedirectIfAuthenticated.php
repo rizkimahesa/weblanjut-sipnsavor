@@ -15,16 +15,16 @@ class RedirectIfAuthenticated
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string ...$guards): Response
-    {
-        $guards = empty($guards) ? [null] : $guards;
-
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
-            }
-        }
-
-        return $next($request);
+    public function handle($request, Closure $next)
+{
+    if (Auth::check()) {
+        // Jika sudah login, arahkan ke halaman dashboard atau admin
+        $user = Auth::user();
+        return $user->role === 'admin' 
+            ? redirect()->route('menus.index') 
+            : redirect()->route('dashboard');
     }
+
+    return $next($request);
+}
 }

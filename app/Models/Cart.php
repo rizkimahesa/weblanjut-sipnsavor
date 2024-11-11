@@ -9,10 +9,13 @@ class Cart extends Model
 {
     use HasFactory;
 
+    // Define the fillable attributes to avoid mass-assignment errors
     protected $fillable = [
-        'Nama_Makanan',
-        'Foto',
-        'Harga',
+        'id',  // Assuming you have a user_id field to associate with users
+        'nama',
+        'foto',
+        'harga',
         'Pesanan',
+        'user_id',
     ];
 }

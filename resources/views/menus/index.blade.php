@@ -4,6 +4,12 @@
 <div class="container mt-5">
     <h1 class="mb-4">Menu List</h1>
 
+    <!-- Tombol Logout -->
+    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+        @csrf
+        <button type="submit" class="btn btn-secondary mb-3">Logout</button>
+    </form>
+
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -25,10 +31,12 @@
             <tr>
                 <td>{{ $menu->nama }}</td>
                 <td>{{ $menu->deskripsi }}</td>
-                <td>Rp{{ $menu->harga }}</td>
+                <td>Rp{{ number_format($menu->harga, 0, ',', '.') }}</td>
                 <td>
                     @if($menu->foto)
-                    <img src="{{ asset($menu->foto) }}" alt="Menu Image" width="100">
+                    <img src="{{ asset('storage/'.$menu->foto) }}" alt="Menu Image" width="50" height="50">
+                    @else
+                        <img src="{{ asset('default-photo.png') }}" alt="Default Foto" width="50" height="50">
                     @endif
                 </td>
                 <td>

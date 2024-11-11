@@ -19,6 +19,63 @@
             border-radius: 8px; /* Membuat sudut yang lebih halus */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Menambahkan shadow untuk efek kedalaman */
         }
+        .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card img {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .card img:hover {
+        transform: scale(1.05);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .card-text {
+        color: #666;
+    }
+
+    .text-success.fw-bold {
+        color: #28a745;
+        font-size: 1.1rem;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    input[type="number"] {
+        width: 60px;
+        padding: 3px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
     </style>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -56,6 +113,13 @@
                         <input class="form-control rounded-pill pe-5 fw-bold" type="search" placeholder="Search" aria-label="Search">
                         <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y pe-3" style="font-size: 1rem;"></i>
                     </div>
+                    <!-- Logout Button -->
+                @if (Auth::check())
+                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-danger ms-3">Logout</button>
+                    </form>
+                @endif
                 </div>
             </div>
         </div>
@@ -78,8 +142,8 @@
         @foreach($menus as $menu)
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="{{ asset($menu->foto) }}" class="card-img-top menu-image" alt="Menu Image">
-                    <div class="card-body">
+                <img src="{{ asset('storage/'.$menu->foto) }}" alt="Menu Image" width="300" height="auto">
+                <div class="card-body">
                         <h5 class="card-title">{{ $menu->nama }}</h5>
                         <p class="card-text">{{ $menu->deskripsi }}</p>
                         <p class="text-success fw-bold">Rp{{ $menu->harga }}</p>
@@ -92,20 +156,19 @@
                         </a>
 
                         <!-- Hidden Form for Adding to Cart -->
-                        <form id="add-to-cart-form-{{ $menu->id }}" action="{{ route('cart.store') }}" method="POST" style="display: none;">
-                            @csrf
-                            <input type="hidden" name="Nama_Makanan" value="{{ $menu->nama }}">
-                            <input type="hidden" name="Foto" value="{{ asset($menu->foto) }}">
-                            <input type="hidden" name="Harga" value="{{ $menu->harga }}">
-                            <input type="number" name="Pesanan" min="1" value="1" required>
-                        </form>
+                        <!-- Form tersembunyi untuk menambahkan item ke cart -->
+<form id="add-to-cart-form-{{ $menu->id }}" action="{{ route('cart.store') }}" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" name="menu_id" value="{{ $menu->id }}">
+    <input type="hidden" name="quantity" value="1"> <!-- Ganti sesuai kebutuhan -->
+</form>
+
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
 </div>
-
 
         <!-- Contact Tab -->
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
@@ -140,36 +203,36 @@
         </div>
 
         <!-- Cart Tab -->
-        <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
-            <h2 class="text-success">Your Cart</h2>
+<div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
+    <h2 class="text-success">Your Cart</h2>
 
-            @if($cartItems->isEmpty())
-                <p class="text-danger">Your cart is empty.</p>
-            @else
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nama Makanan</th>
-                                <th>Pesanan</th>
-                                <th>Harga</th>
-                                <th>Subtotal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($cartItems as $item)
-                                <tr>
-                                    <td>{{ $item->Nama_Makanan }}</td>
-                                    <td>{{ $item->quantity }}</td>
-                                    <td>Rp{{ $item->Harga }}</td>
-                                    <td>Rp{{ $item->Harga * $item->quantity }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+    @if($cartItems->isEmpty())
+        <p class="text-danger">Your cart is empty.</p>
+    @else
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Makanan</th>
+                        <th>Pesanan</th>
+                        <th>Harga</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($cartItems as $item)
+                        <tr>
+                            <td>{{ $item->nama }}</td> <!-- Sesuaikan dengan kolom di database -->
+                            <td>{{ $item->Pesanan }}</td> <!-- Sesuaikan dengan kolom di database -->
+                            <td>Rp{{ number_format($item->harga, 0, ',', '.') }}</td> <!-- Menambahkan format angka -->
+                            <td>Rp{{ number_format($item->harga * $item->Pesanan, 0, ',', '.') }}</td> <!-- Menambahkan format angka dan hitung subtotal -->
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+    @endif
+</div>
 
     <!-- Bootstrap JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
