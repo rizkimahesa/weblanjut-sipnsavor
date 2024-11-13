@@ -16,10 +16,10 @@ class MenuController extends Controller
         return view('menus.index', compact('menus'));
     }
 
-    public function dashboard()
+    public function order()
     {
         $menus = Menu::all(); // Retrieve all menu items
-        return view('dashboard', compact('menus'));
+        return view('order', compact('menus'));
     }
     public function create()
     {
@@ -43,7 +43,7 @@ class MenuController extends Controller
     if ($request->hasFile('foto')) {
         $foto = $request->file('foto');
         $filename = time() . '_' . $foto->getClientOriginalName(); // Generate a unique filename
-        $fotoPath = $foto->storeAs('images/Makanan', $filename, 'public'); // Store the image in the public disk
+        $fotoPath = $foto->move('public/images/Makanan', $filename); // Store the image in the public disk
     }
 
     // Create menu item
@@ -97,8 +97,8 @@ class MenuController extends Controller
     
             $foto = $request->file('foto');
             $filename = time() . '_' . $foto->getClientOriginalName();
-            $fotoPath = $foto->move('images/Makanan', $filename);
-            $menu->foto = 'images/Makanan/' . $filename; // Update the path to the photo
+            $fotoPath = $foto->move('public/images/Makanan', $filename);
+            $menu->foto = 'public/images/Makanan/' . $filename; // Update the path to the photo
         }
     
         $menu->save(); // Save the updated menu item

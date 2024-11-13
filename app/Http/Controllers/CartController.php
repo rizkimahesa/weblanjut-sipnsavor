@@ -13,11 +13,11 @@ class CartController extends Controller
         return view('cart.index', compact('cartItems'));
     }
 
-    public function dashboard()
+    public function cart()
     {
     $cartItems = Cart::all(); // Ambil semua item dari cart
     $menus = Cart::all(); // Ambil semua menu, jika perlu
-    return view('dashboard', compact('cartItems', 'menus')); // Kirimkan kedua variabel ke view
+    return view('cart', compact('cartItems', 'menus')); // Kirimkan kedua variabel ke view
     }
 
     public function store(Request $request)
