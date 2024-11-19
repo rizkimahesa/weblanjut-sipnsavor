@@ -14,7 +14,7 @@
         <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
             <h2 class="text-center text-success mb-4">Login</h2>
             <br>
-            <!-- <img src="{{ asset('images/logoplainwh.png') }}" width="90" alt="logo" margin-left="50px"> -->
+            <img src="{{ asset('images/logoplainwh.png') }}" width="90" alt="logo" margin-left="50px">
 
 
             <form method="POST" action="{{ route('login') }}">
