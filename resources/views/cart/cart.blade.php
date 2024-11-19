@@ -31,24 +31,28 @@
                     @foreach($cartItems as $item)
                         <tr>
                             <td>
-                                <img src="{{ asset($item->photo) }}" alt="Food Photo" style="height: 100px; object-fit: cover;">
+                                <!-- Menampilkan foto makanan, jika foto tidak tersedia tampilkan gambar default -->
+                                <img src="{{ asset('storage/'.$item->foto ?? 'storage/images/default-food.jpg') }}" alt="Food Photo" style="height: 100px; object-fit: cover;">
                             </td>
-                            <td>{{ $item->food_name }}</td>
-                            <td>Rp{{ number_format($item->price, 0, ',', '.') }}</td>
-                            <td>{{ $item->quantity }}</td>
+                            <td>{{ $item->nama }}</td>
+                            <td>Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
+                            <td>{{ $item->Pesanan }}</td>
                         </tr>
-                        @php $total += $item->price * $item->quantity; @endphp
+                        @php $total += $item->harga * $item->Pesanan; @endphp
                     @endforeach
                 </tbody>
             </table>
         </div>
 
-        <div class="d-flex justify-content-end mt-3">
+        <div class="d-flex justify-content-between mt-3">
             <h5 class="me-4">Total: Rp{{ number_format($total, 0, ',', '.') }}</h5>
-            <form action="{{ route('cart.checkout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-success">Order</button>
-            </form>
+            <div>
+                <form action="{{ route('cart.checkout') }}" method="POST" class="d-inline-block">
+                    @csrf
+                    <button type="submit" class="btn btn-success">Order</button>
+                </form>
+                <a href="{{ route('dashboard') }}" class="btn btn-secondary ms-2">Back to Dashboard</a>
+            </div>
         </div>
     </div>
 
