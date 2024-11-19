@@ -22,7 +22,7 @@ class RedirectIfAuthenticated
         $user = Auth::user();
         return $user->role === 'admin' 
             ? redirect()->route('menus.index') 
-            : redirect()->route('dashboard');
+            : redirect()->route('home');
     }
 
     return $next($request);

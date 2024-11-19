@@ -62,6 +62,13 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('cart') ? 'active' : '' }} text-success fw-bold" href="{{ route('cart') }}" role="tab">Cart</a>
                     </li>
+                    <!-- Logout Button -->
+    <div class="text-center mt-4">
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
                     </ul>
                     <!-- Search -->
                     <div class="position-relative">

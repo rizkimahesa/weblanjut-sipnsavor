@@ -23,22 +23,27 @@ class AuthController extends Controller
 
     // Proses login
     public function login(Request $request)
-    {
-        // Validasi data
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+{
+    // Validasi data
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ]);
 
-        // Coba login
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended('/dashboard'); // Redirect ke dashboard setelah login sukses
-        }
+    // Mencari pengguna berdasarkan email
+    $user = User::where('email', $credentials['email'])->first();
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+    // Periksa apakah pengguna ditemukan dan password cocok (langsung dengan string, tanpa hash)
+    if ($user && $user->password === $credentials['password']) {
+        // Jika login berhasil, lakukan autentikasi
+        Auth::login($user);
+        return redirect()->intended('/home'); // Redirect ke dashboard setelah login sukses
     }
+
+    return back()->withErrors([
+        'email' => 'Email atau password salah.',
+    ]);
+}
 
     // Proses register
     public function register(Request $request)
@@ -67,7 +72,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('/');
+        return redirect('/login');
     }
 }
 

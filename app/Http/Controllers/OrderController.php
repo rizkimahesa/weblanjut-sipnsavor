@@ -22,10 +22,15 @@ class OrderController extends Controller
     }
 
     public function index()
-    {
-        $orders = Order::with('menu')->get();
-        return view('orders.index', compact('orders'));
-    }
+{
+    // Ambil semua menu
+    $menus = Menu::all(); 
+
+    // Kirim data menus dan orders ke view
+    $orders = Order::with('menu')->get();
+    return view('order', compact('orders', 'menus')); // Kirim kedua variabel
+}
+
 
     public function store(Request $request)
     {

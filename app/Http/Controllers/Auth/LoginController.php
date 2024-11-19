@@ -34,13 +34,13 @@ class LoginController extends Controller
         if ($user->role === 'admin') {
             return redirect()->route('menus.index');  // Redirect ke halaman admin
         } else {
-            return redirect()->route('dashboard');  // Redirect ke dashboard pengguna
+            return redirect()->route('/home');  // Redirect ke dashboard pengguna
         }
     }
 
     // Jika autentikasi gagal
     return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
+        'email' => 'tidak dapat login.',
     ]);
 }
 
