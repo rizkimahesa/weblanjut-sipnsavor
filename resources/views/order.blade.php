@@ -10,14 +10,18 @@
         @foreach($menus as $menu)
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="{{ asset($menu->foto) }}" class="card-img-top menu-image" alt="Menu Image">
+                    <img src="{{ asset('storage/'.$menu->foto) }}" class="card-img-top menu-image" alt="Menu Image">
                     <div class="card-body">
                         <h5 class="card-title">{{ $menu->nama }}</h5>
                         <p class="card-text">{{ $menu->deskripsi }}</p>
                         <p class="text-success fw-bold">Rp{{ $menu->harga }}</p>
 
+                        <!-- Quantity Input -->
+                        <label for="quantity-{{ $menu->id }}">Jumlah:</label>
+                        <input type="number" id="quantity-{{ $menu->id }}" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 80px;">
+
                         <!-- Order Button -->
-                        <a href="{{ route('cart.store') }}" class="btn btn-primary" 
+                        <a href="{{ route('cart.store') }}" class="btn btn-primary"
                            onclick="event.preventDefault(); 
                            document.getElementById('add-to-cart-form-{{ $menu->id }}').submit();">
                            Order
@@ -26,10 +30,8 @@
                         <!-- Hidden Form for Adding to Cart -->
                         <form id="add-to-cart-form-{{ $menu->id }}" action="{{ route('cart.store') }}" method="POST" style="display: none;">
                             @csrf
-                            <input type="hidden" name="Nama_Makanan" value="{{ $menu->nama }}">
-                            <input type="hidden" name="Foto" value="{{ asset($menu->foto) }}">
-                            <input type="hidden" name="Harga" value="{{ $menu->harga }}">
-                            <input type="number" name="Pesanan" min="1" value="1" required>
+                            <input type="hidden" name="menu_id" value="{{ $menu->id }}">
+                            <input type="hidden" name="quantity" id="hidden-quantity-{{ $menu->id }}" value="1">
                         </form>
                     </div>
                 </div>
@@ -37,4 +39,15 @@
         @endforeach
     </div>
 </div>
+
+<!-- Script for Updating Hidden Quantity -->
+<script>
+    // Update hidden quantity input before submitting the form
+    document.querySelectorAll('input[name="quantity"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const menuId = this.id.split('-')[1];
+            document.getElementById('hidden-quantity-' + menuId).value = this.value;
+        });
+    });
+</script>
 @endsection
