@@ -15,6 +15,7 @@ class CartController extends Controller
     $cartItems = Cart::where('user_id', Auth::id())->get();
     
     return view('cart.cart', compact('cartItems'));
+    
 }
 
     public function cart()

@@ -17,6 +17,6 @@ class DashboardController extends Controller
         $cartItems = Cart::where('user_id', auth()->id())->get();
 
         // Pass both $menus and $cartItems variables to the view
-        return view('dashboard', compact('menus', 'cartItems'));
+        return view('home', compact('menus', 'cartItems'));
     }
 }

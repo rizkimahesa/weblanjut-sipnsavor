@@ -60,7 +60,7 @@
                         <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }} text-success fw-bold" href="{{ route('contact') }}" role="tab">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('cart') ? 'active' : '' }} text-success fw-bold" href="{{ route('cart') }}" role="tab">Cart</a>
+                    <a class="nav-link {{ request()->routeIs('cart.index') ? 'active' : '' }} text-success fw-bold" href="{{ route('cart.index') }}" role="tab">Cart</a>
                     </li>
                     <!-- Logout Button -->
     <div class="text-center mt-4">
