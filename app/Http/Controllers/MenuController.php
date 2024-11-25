@@ -12,19 +12,18 @@ class MenuController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    // Ambil semua data menu dari database
-    $menus = Menu::all();
+    {
+        // Ambil semua data menu dari database
+        $menus = Menu::all();
 
-<<<<<<< HEAD
-    public function order()
-=======
-    // Kirim variabel $menus ke view
-    return view('menus.index', compact('menus'));
-}
-    
+        // Kirim variabel $menus ke view
+        return view('menus.index', compact('menus'));
+    }
+
+    /**
+     * Tampilkan halaman order.
+     */
     public function dashboard()
->>>>>>> login
     {
         $menus = Menu::all(); // Retrieve all menu items
         return view('order', compact('menus'));
@@ -47,17 +46,11 @@ class MenuController extends Controller
             'nama' => 'required',
             'deskripsi' => 'required',
             'harga' => 'required|numeric',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate the photo
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $fotoPath = null;
 
-<<<<<<< HEAD
-    if ($request->hasFile('foto')) {
-        $foto = $request->file('foto');
-        $filename = time() . '_' . $foto->getClientOriginalName(); // Generate a unique filename
-        $fotoPath = $foto->move('public/images/Makanan', $filename); // Store the image in the public disk
-=======
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $filename = time() . '_' . $foto->getClientOriginalName();
@@ -72,7 +65,6 @@ class MenuController extends Controller
         ]);
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan.');
->>>>>>> login
     }
 
     /**
@@ -103,28 +95,24 @@ class MenuController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $menu->nama = $request->nama;
-        $menu->deskripsi = $request->deskripsi;
-        $menu->harga = $request->harga;
+        $menu->nama = $request->input('nama');
+        $menu->deskripsi = $request->input('deskripsi');
+        $menu->harga = $request->input('harga');
 
         if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
             if ($menu->foto) {
-                Storage::disk('public')->delete($menu->foto); // Delete old photo
+                Storage::disk('public')->delete($menu->foto);
             }
-    
+
             $foto = $request->file('foto');
             $filename = time() . '_' . $foto->getClientOriginalName();
-<<<<<<< HEAD
-            $fotoPath = $foto->move('public/images/Makanan', $filename);
-            $menu->foto = 'public/images/Makanan/' . $filename; // Update the path to the photo
-=======
             $fotoPath = $foto->storeAs('images/Makanan', $filename, 'public');
             $menu->foto = $fotoPath;
->>>>>>> login
         }
-    
+
         $menu->save();
-    
+
         return redirect()->route('menus.index')->with('success', 'Menu berhasil diperbarui.');
     }
 
@@ -134,12 +122,11 @@ class MenuController extends Controller
     public function destroy(Menu $menu)
     {
         if ($menu->foto) {
-            Storage::disk('public')->delete($menu->foto); // Delete photo from storage
+            Storage::disk('public')->delete($menu->foto);
         }
 
         $menu->delete();
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus.');
     }
-    
 }

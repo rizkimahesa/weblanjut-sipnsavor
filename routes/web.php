@@ -16,7 +16,7 @@ Route::get('/', function () {
 })->name('home');
 
 // Halaman Dashboard (setelah login)
-Route::middleware('auth')->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::middleware('auth')->get('/home', [DashboardController::class, 'index'])->name('dashboard');
 
 // Rute untuk Admin: Pengelolaan Menu
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -64,8 +64,17 @@ Route::middleware('auth')->get('/cart', [OrderController::class, 'index'])->name
 
 // Rute untuk Logout
 Route::middleware('auth')->post('logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::middleware('auth')->group(function () {
-    // Rute untuk halaman keranjang belanja (Cart)
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
 });
+
+//tambahan
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/orders/konfirmasi', [OrderController::class, 'konfirmasi'])->name('menus.konfirmasi');
+Route::get('/orders/view', [OrderController::class, 'view'])->name('menus.view');
+Route::get('/orders/pesan', [OrderController::class, 'pesan'])->name('menus.pesan');
+Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/menus/pesan', [MenuController::class, 'pesan'])->name('menus.pesan');
