@@ -22,8 +22,9 @@
                     <tr>
                         <th scope="col">Photo</th>
                         <th scope="col">Food Name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
+                        <th scope="col">Harga</th>
+                        <th scope="col">Jumlah</th>
+                        <th scope="col">Tanggal</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +38,7 @@
                             <td>{{ $item->nama }}</td>
                             <td>Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
                             <td>{{ $item->Pesanan }}</td>
+                            <td>{{ $item->created_at }}</td>
                         </tr>
                         @php $total += $item->harga * $item->Pesanan; @endphp
                     @endforeach

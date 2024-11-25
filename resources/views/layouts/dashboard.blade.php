@@ -51,7 +51,7 @@
                 <div class="d-flex align-items-center">
                     <ul class="nav nav-tabs me-4">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }} text-success fw-bold" href="{{ route('home') }}" role="tab">Home</a>
+                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }} text-success fw-bold" href="{{ route('dashboard') }}" role="tab">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('order') ? 'active' : '' }} text-success fw-bold" href="{{ route('order') }}" role="tab">Order</a>
