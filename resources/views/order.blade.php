@@ -46,7 +46,9 @@
     document.querySelectorAll('input[name="quantity"]').forEach(input => {
         input.addEventListener('input', function() {
             const menuId = this.id.split('-')[1];
-            document.getElementById('hidden-quantity-' + menuId).value = this.value;
+            const quantity = this.value;  // Get the value from input
+            // Update the hidden input field
+            document.getElementById('hidden-quantity-' + menuId).value = quantity;
         });
     });
 </script>

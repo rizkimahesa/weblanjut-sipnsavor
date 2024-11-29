@@ -9,6 +9,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\HistoryController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -70,12 +72,53 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
 });
 
-//tambahan
-Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-Route::get('/orders/konfirmasi', [OrderController::class, 'konfirmasi'])->name('menus.konfirmasi');
-Route::get('/orders/view', [OrderController::class, 'view'])->name('menus.view');
-Route::get('/orders/pesan', [OrderController::class, 'pesan'])->name('menus.pesan');
-Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-Route::get('/menus/pesan', [MenuController::class, 'pesan'])->name('menus.pesan');
+// Menggunakan middleware auth untuk checkout dan order history
+Route::middleware(['auth'])->group(function () {
+    // Route untuk checkout cart
+    Route::post('/cart/checkout', [OrderController::class, 'checkout'])->name('cart.checkout');
+    
+    // Route untuk melihat riwayat order
+    Route::get('/order/history', [OrderController::class, 'orderHistory'])->name('order.history');
+});
 
+// Menggunakan middleware auth dan admin untuk admin orders
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Route untuk melihat semua pesanan admin
+    Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
+    
+    // Route untuk mengonfirmasi pesanan oleh admin
+    Route::post('/admin/orders/{order}/confirm', [AdminOrderController::class, 'confirm'])->name('admin.orders.confirm');
+});
+
+// Route untuk halaman history
+Route::get('/history', [HistoryController::class, 'index'])->name('history');
+
+// Route untuk melihat daftar orders (bukan admin)
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+
+// Route untuk membuat pesanan baru
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+
+// Route untuk konfirmasi pesanan (admin)
+Route::prefix('admin/orders')->group(function () {
+    Route::get('/', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::post('/confirm/{orderId}', [AdminOrderController::class, 'confirmOrder'])->name('orders.confirm');
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    // Rute untuk menampilkan form checkout (jika diperlukan)
+    Route::get('/cart/checkout', [OrderController::class, 'checkoutForm'])->name('cart.checkout.form');
+
+    // Rute untuk menangani proses checkout
+    Route::post('/cart/checkout', [OrderController::class, 'checkout'])->name('cart.checkout');
+
+    // Rute untuk menampilkan riwayat pemesanan
+    Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
+});
+
+// Rute tambahan untuk admin (jika ada halaman detail untuk order)
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+});
+Route::middleware('auth')->get('/history', [HistoryController::class, 'index'])->name('history');

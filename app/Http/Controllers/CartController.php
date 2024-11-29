@@ -1,11 +1,12 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
-use Illuminate\Http\Request;
-use App\Models\Menu;
+use App\Models\Cart;        // Model Cart
+use App\Models\Menu;        // Model Menu
+use App\Models\Order;       // Model Order
+use App\Models\OrderItem;   // Model OrderItem
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
@@ -30,42 +31,29 @@ class CartController extends Controller
 
     public function store(Request $request)
 {
-    
-    // Validasi dan cek login
-    if (!Auth::check()) {
-        return redirect()->route('login')->with('error', 'You must be logged in to add items to the cart.');
-    }
-
     // Validasi input
-    $request->validate([
-        'menu_id' => 'required|exists:menus,id',
-        'quantity' => 'required|integer|min:1',
+    $validated = $request->validate([
+        'menu_id' => 'required|exists:menus,id',  // Memastikan menu_id ada di tabel menus
+        'quantity' => 'required|integer|min:1',  // Memastikan quantity valid
     ]);
-    
-    $menu = Menu::find($request->menu_id);
 
-    // Cek apakah item sudah ada di cart
-    $existingItem = Cart::where('nama', $menu->nama)
-                        ->where('user_id', Auth::id())
-                        ->first();
+    // Ambil data menu berdasarkan menu_id
+    $menu = Menu::findOrFail($validated['menu_id']);
 
-    if ($existingItem) {
-        // Jika sudah ada, tambahkan jumlah (quantity) nya
-        $existingItem->Pesanan += $request->quantity;
-        $existingItem->save();
-    } else {
-        // Jika belum ada, simpan item baru ke cart
-        Cart::create([
-            'user_id' => Auth::id(),
-            'nama' => $menu->nama,
-            'foto' => $menu->foto ?? 'default-food.jpg',  // Foto default jika tidak ada
-            'harga' => $menu->harga,
-            'Pesanan' => $request->quantity,
-        ]);
-    }
+    // Simpan data ke tabel cart
+    Cart::create([
+        'user_id' => auth()->id(),  // Ambil user yang sedang login
+        'menu_id' => $validated['menu_id'],
+        'nama' => $menu->nama,
+        'harga' => $menu->harga,
+        'Pesanan' => $validated['quantity'],  // Simpan quantity
+        'foto' => $menu->foto,
+    ]);
 
-    return redirect()->route('cart.index')->with('success', 'Item added to cart!');
+    return redirect()->route('cart.index');  // Kembali ke halaman cart atau halaman lain setelah order
 }
+
+
 
 
 
@@ -77,24 +65,49 @@ class CartController extends Controller
     }
     // Di dalam controller
 
+
+
+
+
+
+
     public function checkout(Request $request)
     {
-        // Logika checkout (misalnya, memproses pembayaran atau status pesanan)
+        $menuIds = $request->input('menu_id');
+        $quantities = $request->input('quantity');
+        
+        // Pastikan input menu_id dan quantity tidak kosong
+        if ($menuIds && $quantities && count($menuIds) === count($quantities)) {
+            foreach ($menuIds as $key => $menuId) {
+                // Pastikan jumlah item di menuId dan quantity sama
+                if (isset($quantities[$key])) {
+                    Order::create([
+                        'menu_id' => $menuId,
+                        'quantity' => $quantities[$key],
+                        'customer_name' => auth()->user()->name, // Nama customer
+                    ]);
+                }
+            }
     
-        // Cek jika pengguna sudah login
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'You need to login first!');
+            return redirect()->route('cart.index')->with('success', 'Order placed successfully.');
+        } else {
+            // Tangani jika input kosong atau jumlah data tidak sesuai
+            return redirect()->back()->with('error', 'Menu atau Quantity tidak valid.');
         }
-    
-        // Dapatkan item cart untuk user yang login
-        $cartItems = Cart::where('user_id', Auth::id())->get();
-    
-        // Logika lain untuk checkout, seperti menyimpan data pesanan, dll.
-        // Contoh: menghapus semua item cart setelah checkout
-        Cart::where('user_id', Auth::id())->delete();
-    
-        return redirect()->route('cart.index')->with('success', 'Your order has been placed successfully!');
     }
     
+   
+    
+    
+
+
+
+
+
+    public function orderHistory()
+    {
+        $orders = Order::where('user_id', Auth::id())->with('items.menu')->get();
+        return view('order.history', compact('orders'));
+    }
 
 }
