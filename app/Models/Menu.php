@@ -16,4 +16,8 @@ class Menu extends Model
         'harga',
         'foto',
     ];
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

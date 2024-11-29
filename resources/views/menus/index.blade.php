@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
+    <!-- Bagian Menu List -->
     <h1 class="mb-4">Menu List</h1>
 
     <!-- Tombol Logout -->
@@ -15,7 +16,7 @@
     @endif
 
     <a href="{{ route('menus.create') }}" class="btn btn-success mb-3">Add New Menu</a>
-
+    <a href="{{ route('admin.orders.konfirmasi') }}" class="btn btn-primary">Konfirmasi Pesanan</a>
     <table class="table">
         <thead>
             <tr>
@@ -51,5 +52,3 @@
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection

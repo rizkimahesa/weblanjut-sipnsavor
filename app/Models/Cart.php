@@ -10,13 +10,9 @@ class Cart extends Model
     use HasFactory;
 
     // Define the fillable attributes to avoid mass-assignment errors
-    protected $fillable = [
-        'id',  // Assuming you have a user_id field to associate with users
-        'nama',
-        'foto',
-        'harga',
-        'Pesanan',
-        'user_id',
-        'created_at'
-    ];
+    protected $fillable = ['user_id', 'menu_id', 'nama', 'harga', 'Pesanan', 'foto'];
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'menu_id'); // Pastikan 'menu_id' adalah kolom relasi yang ada di Cart
+    }
 }

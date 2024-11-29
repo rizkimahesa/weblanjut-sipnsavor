@@ -10,14 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, $role)
+    public function handle($request, Closure $next, $role)
     {
-        if (Auth::check() && Auth::user()->role == $role) {
-            return $next($request);
+        if (!Auth::check() || Auth::user()->role !== $role) {
+            return redirect()->route('home'); // Redirect ke halaman default
         }
 
-        // Jika role tidak cocok, redirect ke halaman lain atau error
-        return redirect('/');  // Atau bisa ke halaman tertentu jika role tidak cocok
+        return $next($request);
     }
 }
 

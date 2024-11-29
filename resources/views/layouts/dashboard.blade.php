@@ -62,6 +62,10 @@
                     <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('cart.index') ? 'active' : '' }} text-success fw-bold" href="{{ route('cart.index') }}" role="tab">Cart</a>
                     </li>
+                    <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('history') ? 'active' : '' }} text-success fw-bold" href="{{ route('history') }}" role="tab">History</a>
+
+                    </li>
                     <!-- Logout Button -->
     <div class="text-center mt-4">
         <form action="{{ route('logout') }}" method="POST">

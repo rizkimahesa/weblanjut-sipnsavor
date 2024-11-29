@@ -37,7 +37,13 @@ class AuthController extends Controller
     if ($user && $user->password === $credentials['password']) {
         // Jika login berhasil, lakukan autentikasi
         Auth::login($user);
-        return redirect()->intended('/home'); // Redirect ke dashboard setelah login sukses
+    
+        // Redirect berdasarkan role
+        if ($user->role === 'admin') {
+            return redirect()->route('menus.index'); // Halaman menu untuk admin
+        }
+    
+        return redirect()->route('dashboard'); // Halaman dashboard untuk user biasa
     }
 
     return back()->withErrors([

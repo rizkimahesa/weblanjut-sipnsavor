@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Order;
 class MenuController extends Controller
 {
     /**
@@ -18,6 +18,8 @@ class MenuController extends Controller
 
         // Kirim variabel $menus ke view
         return view('menus.index', compact('menus'));
+
+        
     }
 
     /**
@@ -129,4 +131,10 @@ class MenuController extends Controller
 
         return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus.');
     }
+
+    public function konfirmasi()
+{
+    return view('menus.konfirmasi'); // Menampilkan view konfirmasi
+}
+
 }
