@@ -78,3 +78,4 @@ Route::get('/orders/pesan', [OrderController::class, 'pesan'])->name('menus.pesa
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/menus/pesan', [MenuController::class, 'pesan'])->name('menus.pesan');
+
