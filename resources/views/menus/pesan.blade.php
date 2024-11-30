@@ -1,48 +1,41 @@
+<!-- resources/views/menus/pesan.blade.php -->
 @extends('layouts.app')
 
 @section('content')
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0056b3;">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Menu Management</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('menus.create') }}">Tambah Menu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('menus.pesan') }}">Pesan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('menus.konfirmasi') }}">Konfirmasi Pesanan</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div class="container mt-5">
+    <h1 class="mb-4">Pesan</h1>
 
-<div class="container mt-5 pt-5">
-    <!-- Main Content -->
-    <h1 class="mb-4">Pesan Menu</h1>
-    <div class="row">
-    <h2 class="mb-4 mt-5">Pesan-pesan yang Dikirimkan</h2>
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    <!-- Tombol Kembali ke Halaman Sebelumnya -->
+    <div class="mt-4">
+        <a href="{{ route('menus.index') }}" class="btn btn-primary btn-lg">Kembali ke Menu</a>
+    </div>
+
+    <!-- Daftar Pesan -->
     <table class="table">
         <thead>
             <tr>
-                <th>Nama</th>
-                <th>Email</th>
+                <th>User</th>
                 <th>Pesan</th>
+                <th>Tanggal</th>
+                <th>Aksi</th> <!-- Kolom Aksi -->
             </tr>
         </thead>
         <tbody>
-            @foreach($contacts as $contact)
+            @foreach($pesans as $pesan)
             <tr>
-                <td>{{ $contact->name }}</td>
-                <td>{{ $contact->email }}</td>
-                <td>{{ $contact->message }}</td>
+                <td>{{ $pesan->user->name }}</td> <!-- Menampilkan nama user -->
+                <td>{{ $pesan->message }}</td>
+                <td>{{ $pesan->created_at->format('d-m-Y') }}</td> <!-- Menampilkan tanggal pesan -->
+                <td>
+                    <form action="{{ route('pesan.destroy', $pesan->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this message?')">Delete</button>
+                    </form>
+                </td>
             </tr>
             @endforeach
         </tbody>

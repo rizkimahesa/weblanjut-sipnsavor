@@ -17,6 +17,9 @@
 
     <a href="{{ route('menus.create') }}" class="btn btn-success mb-3">Add New Menu</a>
     <a href="{{ route('admin.orders.konfirmasi') }}" class="btn btn-primary">Konfirmasi Pesanan</a>
+<!-- Tombol untuk menuju halaman pesan -->
+<a href="{{ route('pesan.index') }}" class="btn btn-info mb-3">View Pesan</a>
+
     <table class="table">
         <thead>
             <tr>
