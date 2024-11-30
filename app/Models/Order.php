@@ -26,4 +26,9 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'user_id'); // 'user_id' merujuk ke id di tabel users
     }
+    public function menus()
+{
+    return $this->belongsToMany(Menu::class)->withPivot('quantity', 'price');
+}
+
 }

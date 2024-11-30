@@ -15,4 +15,13 @@ class Cart extends Model
     {
         return $this->belongsTo(Menu::class, 'menu_id'); // Pastikan 'menu_id' adalah kolom relasi yang ada di Cart
     }
+    public function items()
+    {
+        return $this->hasMany(CartItem::class); // Pastikan menggunakan nama relasi yang sesuai
+    }
+
+    public function getItems()
+    {
+        return $this->items; // Mengambil semua item dari cart
+    }
 }

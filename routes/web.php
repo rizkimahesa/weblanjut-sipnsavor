@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\PaymentController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -133,3 +134,5 @@ Route::get('admin/orders/{order}/confirm', [AdminOrderController::class, 'confir
 Route::get('/user/pesanan', [OrderController::class, 'userPesanan'])->name('user.pesanan');
 Route::post('/user/pesanan/{order}/cancel', [OrderController::class, 'cancelPesanan'])->name('user.pesanan.cancel');
 Route::post('/pesanan/{id}/cancel', [OrderController::class, 'cancelPesanan'])->name('user.pesanan.cancel');
+Route::get('/payment/process/{order_id}/{amount}', [PaymentController::class, 'process'])->name('payment.process');
+
