@@ -10,7 +10,7 @@
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Riwayat Pesanan</h1>
-
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary ms-2">Back to Dashboard</a>
         <!-- Tabel Riwayat Pesanan -->
         <table class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
@@ -20,6 +20,7 @@
                     <th>Harga</th>
                     <th>Nama Pelanggan</th>
                     <th>Tanggal Pesan</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +30,8 @@
                         <td>{{ $order->quantity }}</td> <!-- Menampilkan jumlah pesanan -->
                         <td>Rp{{ number_format($order->menu->harga * $order->quantity, 0, ',', '.') }}</td> <!-- Harga total -->
                         <td>{{ $order->user->name }}</td> <!-- Menampilkan nama pelanggan -->
-                        <td>{{ $order->created_at }}</td> <!-- Menampilkan tanggal pesanan -->
+                        <td>{{ $order->created_at->format('d-m-Y H:i') }}</td> <!-- Menampilkan tanggal pesanan -->
+                        <td>{{ ucfirst($order->status) }}</td> <!-- Menampilkan status pesanan -->
                     </tr>
                 @endforeach
             </tbody>

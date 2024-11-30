@@ -2,13 +2,9 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2 class="text-success mb-4">Admin Orders</h2>
-     <!-- Tombol Kembali ke Halaman Sebelumnya -->
-    <div class="mt-4">
-        <a href="{{ route('menus.index') }}" class="btn btn-primary btn-lg">Kembali ke Menu</a>
-    </div>
+    <h2 class="text-primary mb-4">Status Pesanan Anda</h2>
+    <a href="{{ route('dashboard') }}" class="btn btn-secondary ms-2">Back to Dashboard</a>
 
-    <!-- Notifikasi pesan sukses atau error -->
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -21,19 +17,18 @@
         </div>
     @endif
 
-    <!-- Pesanan Pending -->
-    <h4 class="text-primary mb-3">Pesanan Pending</h4>
-    @if ($orders->where('status', 'pending')->isEmpty())
-        <p class="text-muted">Tidak ada pesanan yang pending.</p>
+    <h4 class="mb-3">Pesanan Pending</h4>
+    @if ($orders->isEmpty())
+        <p class="text-muted">Anda tidak memiliki pesanan yang sedang pending.</p>
     @else
-        @foreach ($orders->where('status', 'pending') as $order)
+        @foreach ($orders as $order)
             <div class="card mb-4 shadow-lg">
                 <div class="card-header bg-warning text-white">
                     <h5 class="mb-0">Order #{{ $order->id }} - Status: {{ ucfirst($order->status) }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <!-- Foto Makanan, Nama User, dan No HP User -->
+                        <!-- Foto Makanan, Nama Menu, dan Harga -->
                         <div class="col-md-4">
                             <img src="{{ asset('storage/'.$order->menu->foto) }}" alt="{{ $order->menu->nama }}" class="img-fluid" style="max-height: 150px; object-fit: cover;">
                         </div>
@@ -45,15 +40,22 @@
                             <p class="fw-bold">No HP User: <span class="text-muted">{{ $order->user->phone }}</span></p>
                         </div>
                     </div>
-                    <!-- Konfirmasi Tombol -->
-                    <div class="text-end">
-                        <a href="{{ route('admin.orders.confirm', $order->id) }}" class="btn btn-success btn-lg">Konfirmasi Pesanan</a>
-                    </div>
+
                     <hr>
+
+                    <!-- Tombol Batalkan Pesanan -->
+                    @if ($order->status == 'pending')
+                        <form action="{{ route('user.pesanan.cancel', $order->id) }}" method="POST">
+                            @csrf
+                            @method('POST')
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-danger btn-lg">Batalkan Pesanan</button>
+                            </div>
+                        </form>
+                    @endif
                 </div>
             </div>
         @endforeach
     @endif
-
 </div>
 @endsection

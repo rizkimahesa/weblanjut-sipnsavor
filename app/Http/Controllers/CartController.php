@@ -89,7 +89,7 @@ class CartController extends Controller
                 }
             }
     
-            return redirect()->route('cart.index')->with('success', 'Order placed successfully.');
+            return view('order')->with('success', 'Pesanan berhasil dibuat!');
         } else {
             // Tangani jika input kosong atau jumlah data tidak sesuai
             return redirect()->back()->with('error', 'Menu atau Quantity tidak valid.');

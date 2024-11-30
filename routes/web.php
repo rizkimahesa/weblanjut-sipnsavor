@@ -122,3 +122,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
 Route::middleware('auth')->get('/history', [HistoryController::class, 'index'])->name('history');
+Route::post('/cart/checkout', [OrderController::class, 'checkout'])->name('cart.checkout');
+Route::get('/admin/orders/konfirmasi', [AdminOrderController::class, 'konfirmasi'])->name('admin.orders.konfirmasi');
+
+// Konfirmasi pesanan dari admin
+Route::get('admin/orders/{order}/confirm', [AdminOrderController::class, 'confirm'])->name('admin.orders.confirm');
+
+
+// user membatalkan pesanan
+Route::get('/user/pesanan', [OrderController::class, 'userPesanan'])->name('user.pesanan');
+Route::post('/user/pesanan/{order}/cancel', [OrderController::class, 'cancelPesanan'])->name('user.pesanan.cancel');
+Route::post('/pesanan/{id}/cancel', [OrderController::class, 'cancelPesanan'])->name('user.pesanan.cancel');
