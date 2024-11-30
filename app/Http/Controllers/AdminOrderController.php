@@ -7,30 +7,43 @@ use Illuminate\Http\Request;
 class AdminOrderController extends Controller
 {
     public function index()
-    {
-        $orders = Order::with('items.menu', 'user')->get();
-        return view('admin.orders.index', compact('orders'));
-    }
+{
+    // Mengambil semua pesanan (baik yang pending maupun yang sudah dikonfirmasi)
+    $orders = Order::with('menu', 'user') // Pastikan relasi menu dan user dimuat
+        ->orderBy('status') // Urutkan berdasarkan status
+        ->get();
 
-    public function confirm(Order $order)
-    {
-        $order = Order::findOrFail($orderId); // Cari order berdasarkan ID
+    return view('menus.konfirmasi', compact('orders'));
+}
 
-        // Pastikan pesanan belum dikonfirmasi
-        if ($order->status != 'confirmed') {
-            $order->status = 'confirmed'; // Ubah status pesanan menjadi 'confirmed'
-            $order->save(); // Simpan perubahan
+
+    public function confirm($id)
+    {
+        // Ambil pesanan berdasarkan ID
+        $order = Order::findOrFail($id);
+
+        // Periksa apakah pesanan masih berstatus pending
+        if ($order->status == 'pending') {
+            // Ubah status menjadi confirmed
+            $order->status = 'confirmed';
+            $order->save();
+
+            // Mengirimkan pesan sukses menggunakan sesi flash
+            return redirect()->route('admin.orders.konfirmasi')->with('success', 'Pesanan berhasil dikonfirmasi!');
         }
 
-        return redirect()->route('admin.orders.index')->with('success', 'Pesanan berhasil dikonfirmasi');
+        // Jika status bukan pending, beri pesan error
+        return redirect()->route('admin.orders.konfirmasi')->with('error', 'Pesanan sudah dikonfirmasi atau tidak ditemukan.');
     }
     
     public function konfirmasi()
-    {
-        // Ambil semua pesanan dengan relasi items, menu, dan user
-        $orders = Order::with('items.menu', 'user')->get();
-        return view('menus.konfirmasi', compact('orders')); // Kirim data ke view
-    }
+{
+    // Ambil semua pesanan dengan status 'pending'
+    $orders = Order::where('status', 'pending')->get();
+
+    // Kirim data pesanan ke view
+    return view('menus.konfirmasi', compact('orders'));
+}
 
 
     public function confirmOrder($orderId)

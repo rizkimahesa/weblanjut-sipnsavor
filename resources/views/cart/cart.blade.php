@@ -56,13 +56,13 @@
                 <h5 class="me-4">Total: Rp{{ number_format($total, 0, ',', '.') }}</h5>
                 <div>
                 <form action="{{ route('cart.checkout') }}" method="POST">
-    @csrf
-    @foreach ($cartItems as $item)
-        <input type="hidden" name="menu_id[]" value="{{ $item->id }}">
-        <input type="hidden" name="quantity[]" value="{{ $item->Pesanan }}">
-    @endforeach
-    <button type="submit" class="btn btn-success">Order</button>
-</form>
+                    @csrf
+                    @foreach ($cartItems as $item)
+                    <input type="hidden" name="menu_id[]" value="{{ $item->id }}">
+                    <input type="hidden" name="quantity[]" value="{{ $item->Pesanan }}">
+                    @endforeach
+                    <button type="submit" class="btn btn-success">Order</button>
+                    </form>
 
                     <a href="{{ route('dashboard') }}" class="btn btn-secondary ms-2">Back to Dashboard</a>
                 </div>
