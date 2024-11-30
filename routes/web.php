@@ -136,3 +136,18 @@ Route::post('/user/pesanan/{order}/cancel', [OrderController::class, 'cancelPesa
 Route::post('/pesanan/{id}/cancel', [OrderController::class, 'cancelPesanan'])->name('user.pesanan.cancel');
 Route::get('/payment/process/{order_id}/{amount}', [PaymentController::class, 'process'])->name('payment.process');
 
+// contact
+Route::middleware('auth', 'admin')->group(function() {
+    Route::get('/admin/pesan', [AdminController::class, 'showMessages'])->name('admin.pesan');
+});
+// routes/web.php
+
+Route::get('/pesan', function () {
+    return view('menus.pesan');  // Arahkan ke views/menus/pesan.blade.php
+})->name('pesan.index');
+Route::get('/pesan', [ContactController::class, 'index'])->name('pesan.index');
+Route::delete('/pesan/{id}', [ContactController::class, 'destroy'])->name('pesan.destroy');
+
+Route::delete('/pesan/{id}', [ContactController::class, 'destroy'])
+    ->name('pesan.destroy')
+    ->middleware('admin');
