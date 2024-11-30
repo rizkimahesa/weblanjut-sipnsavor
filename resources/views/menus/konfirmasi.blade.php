@@ -42,7 +42,7 @@
                             <p class="fw-bold">Jumlah: <span class="text-muted">{{ $order->quantity }}</span></p>
                             <p class="fw-bold">Harga: <span class="text-success">Rp{{ number_format($order->total_price, 0, ',', '.') }}</span></p>
                             <p class="fw-bold">Nama User: <span class="text-muted">{{ $order->user->name }}</span></p>
-                            <p class="fw-bold">No HP User: <span class="text-muted">{{ $order->user->phone }}</span></p>
+                            <p class="fw-bold">No HP User: <span class="text-muted">{{ $order->user->no_hp }}</span></p>
                         </div>
                     </div>
                     <!-- Konfirmasi Tombol -->

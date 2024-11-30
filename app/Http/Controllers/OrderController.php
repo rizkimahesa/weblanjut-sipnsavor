@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Menu; // Import the Menu model
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use SimpleQRCode;
 
 class OrderController extends Controller
 {
@@ -68,6 +69,11 @@ public function checkout(Request $request)
     // Ambil cart items milik user yang sedang login
     $cartItems = Cart::where('user_id', auth()->id())->get();
 
+    // Jika cart kosong, arahkan ke halaman dashboard
+    if ($cartItems->isEmpty()) {
+        return redirect()->route('dashboard')->with('error', 'Your cart is empty!');
+    }
+
     // Proses setiap item dan simpan ke tabel orders
     foreach ($cartItems as $item) {
         Order::create([
@@ -81,12 +87,21 @@ public function checkout(Request $request)
     // Hapus cart setelah checkout
     Cart::where('user_id', auth()->id())->delete();
 
-    // Ambil menu yang dipesan berdasarkan ID
-    $menus = Menu::whereIn('id', $cartItems->pluck('menu_id'))->get();
+    // Hitung total harga pesanan
+    $totalPrice = $cartItems->sum(function ($item) {
+        return $item->harga * $item->Pesanan;
+    });
 
-    // Tampilkan halaman order.blade.php dengan data
-    return view('home', compact('menus'))->with('success', 'Your order has been placed!');
+    // Buat URL pembayaran
+    $paymentUrl = route('payment.process', ['order_id' => $cartItems->first()->id, 'amount' => $totalPrice]);
+
+    // Tampilkan halaman pembayaran atau konfirmasi
+    return view('paymert.payment', compact('paymentUrl'))->with('success', 'Your order has been placed!');
 }
+
+
+
+
 
 
 

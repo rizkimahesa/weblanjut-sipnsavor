@@ -62,7 +62,7 @@
                     <input type="hidden" name="quantity[]" value="{{ $item->Pesanan }}">
                     @endforeach
                     <button type="submit" class="btn btn-success">Order</button>
-                    </form>
+                </form>
 
                     <a href="{{ route('dashboard') }}" class="btn btn-secondary ms-2">Back to Dashboard</a>
                 </div>
