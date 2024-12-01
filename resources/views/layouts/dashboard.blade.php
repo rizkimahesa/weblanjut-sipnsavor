@@ -69,12 +69,12 @@
                     <a class="nav-link {{ request()->routeIs('history') ? 'active' : '' }} text-success fw-bold" href="{{ route('history') }}" role="tab">History</a>
                     </li>
                     <!-- Logout Button -->
-    <div class="text-center mt-4">
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
-    </div>
+            <div class="text-center me-4">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
+            </div>
                     </ul>
                     <!-- Search -->
                     <div class="position-relative">
