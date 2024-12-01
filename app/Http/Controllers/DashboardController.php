@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $menus = Menu::all();  // Get all menus
         
         // Retrieve all cart items for the logged-in user
-        $cartItems = Cart::where('user_id', auth()->id())->get();
+        $cartItems = Cart::where('id', auth()->id())->get();
 
         // Pass both $menus and $cartItems variables to the view
         return view('home', compact('menus', 'cartItems'));

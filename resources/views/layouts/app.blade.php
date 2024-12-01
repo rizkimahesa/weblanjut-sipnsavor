@@ -14,7 +14,7 @@
 <body class="bg-light">
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{{ url('/') }}">SipnSavor</a>
+            <a class="navbar-brand" href="{{ route('menus.index') }}">SipnSavor</a>
             <!-- Add your navigation menu here -->
         </nav>
 

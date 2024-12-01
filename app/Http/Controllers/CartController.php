@@ -13,7 +13,7 @@ class CartController extends Controller
     public function index()
 {
     // Mengambil item cart untuk user yang sedang login
-    $cartItems = Cart::where('user_id', Auth::id())->get();
+    $cartItems = Cart::where('id', Auth::id())->get();
     
     return view('cart.cart', compact('cartItems'));
     
@@ -42,9 +42,9 @@ class CartController extends Controller
 
     // Simpan data ke tabel cart
     Cart::create([
-        'user_id' => auth()->id(),  // Ambil user yang sedang login
+        'id' => auth()->id(),  // Ambil user yang sedang login
         'menu_id' => $validated['menu_id'],
-        'nama' => $menu->nama,
+        'Nama Makanan' => $menu->nama,
         'harga' => $menu->harga,
         'Pesanan' => $validated['quantity'],  // Simpan quantity
         'foto' => $menu->foto,

@@ -47,7 +47,7 @@ public function store(Request $request)
 
     // Menyimpan data ke dalam tabel cart
     Cart::create([
-        'user_id' => auth()->id(),
+        'id' => auth()->id(),
         'menu_id' => $validated['menu_id'],
         'nama' => $menu->nama,
         'harga' => $menu->harga,
@@ -77,7 +77,7 @@ public function checkout(Request $request)
     // Proses setiap item dan simpan ke tabel orders
     foreach ($cartItems as $item) {
         Order::create([
-            'user_id' => $item->user_id,
+            'id' => $item->user_id,
             'menu_id' => $item->menu_id,
             'quantity' => $item->Pesanan,
             'total_price' => $item->harga * $item->Pesanan,
@@ -85,7 +85,7 @@ public function checkout(Request $request)
     }
 
     // Hapus cart setelah checkout
-    Cart::where('user_id', auth()->id())->delete();
+    Cart::where('id', auth()->id())->delete();
 
     // Hitung total harga pesanan
     $totalPrice = $cartItems->sum(function ($item) {
