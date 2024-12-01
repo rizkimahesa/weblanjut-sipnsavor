@@ -26,7 +26,7 @@ class RegisteredController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'no_hp' => 'required|string|max:15',
+            'no_hp' => 'required|string|min:12|max:15',
             'password' => 'required|string|min:8', // Tidak ada 'confirmed'
         ]);
 
@@ -38,6 +38,8 @@ class RegisteredController extends Controller
             'password' => $request->password, // Enkripsi password
             'role' => 'user', // Menetapkan role sebagai 'user'
         ]);
+        session()->flash('success', 'Akun berhasil dibuat! Silakan login.');
+
 
         // Setelah registrasi sukses, arahkan ke halaman login
         return redirect()->route('login');

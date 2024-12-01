@@ -27,7 +27,11 @@
     </nav>
 <div class="container mt-5 pt-4">
     <h2 class="text-center text-success mb-4">Konfirmasi Pesanan</h2>
-
+    <div class="mb-4 text-center">
+        <a href="{{ route('menus.index') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-arrow-left"></i> Kembali ke Menu
+        </a>
+    </div>
     <!-- Notifikasi -->
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -71,11 +75,7 @@
         
         @endforelse
     </div>
-    <div class="mb-4 text-center">
-        <a href="{{ route('menus.index') }}" class="btn btn-primary btn-lg">
-            <i class="fas fa-arrow-left"></i> Kembali ke Menu
-        </a>
-    </div>
+    
 </div>
 
 <!-- Tambahkan Font Awesome dan Gaya Tambahan -->

@@ -12,6 +12,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
 
 // Halaman Utama
 Route::get('/', function () {
@@ -151,3 +153,24 @@ Route::delete('/pesan/{id}', [ContactController::class, 'destroy'])->name('pesan
 Route::delete('/pesan/{id}', [ContactController::class, 'destroy'])
     ->name('pesan.destroy')
     ->middleware('admin');
+
+    Route::get('/reset-password', function () {
+        return view('auth.reset-password');
+    })->name('password.reset');
+    
+    Route::post('/check-email', [ResetPasswordController::class, 'checkEmail'])->name('password.checkEmail');
+    Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
+    Route::get('/reset-password', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    
+    
+Route::get('/reset-password/{email}', [ResetPasswordController::class, 'showPasswordForm'])->name('password.updateForm'); // Rute baru untuk form reset password
+Route::get('reset-password/{email}', [ResetPasswordController::class, 'showPasswordForm'])->name('password.updateForm');
+Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
+
+Route::post('check-email', [ResetPasswordController::class, 'checkEmail'])->name('password.checkEmail');
+Route::get('reset-password/{email}', [ResetPasswordController::class, 'showPasswordForm'])->name('password.updateForm');
+Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
+
+
+
+   

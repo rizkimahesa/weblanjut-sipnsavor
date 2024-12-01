@@ -9,7 +9,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-7"> <!-- Menambahkan margin lebih besar pada ul -->
+                <ul class="navbar-nav ms-7">
                     <li class="nav-item">
                         <a class="nav-link text-white rounded-hover" href="{{ route('menus.create') }}">Add New Menu</a>
                     </li>
@@ -20,7 +20,7 @@
                         <a class="nav-link text-white rounded-hover" href="{{ route('pesan.index') }}">View Pesan</a>
                     </li>
                 </ul>
-                <form action="{{ route('logout') }}" method="POST" class="d-flex ms-2"> <!-- Menambahkan margin lebih besar untuk tombol logout -->
+                <form action="{{ route('logout') }}" method="POST" class="d-flex ms-2">
                     @csrf
                     <button type="submit" class="btn btn-secondary">Logout</button>
                 </form>
@@ -36,47 +36,52 @@
         @endif
 
         <!-- Menu List -->
-        <h1 class="mb-4">Menu List</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Deskripsi</th>
-                    <th>Harga</th>
-                    <th>Foto</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($menus as $menu)
-                <tr>
-                    <td>{{ $menu->nama }}</td>
-                    <td>{{ $menu->deskripsi }}</td>
-                    <td>Rp{{ number_format($menu->harga, 0, ',', '.') }}</td>
-                    <td>
-                    @if($menu->foto)
-                    <img src="{{ asset('storage/'.$menu->foto) }}" alt="Menu Image" width="50" height="50">
-                    @else
-                        <img src="{{ asset('default-photo.png') }}" alt="Default Foto" width="50" height="50">
-                    @endif
-                </td>
-                    <td>
-                        <a href="{{ route('menus.edit', $menu->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this menu item?');">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Menu List</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nama</th>
+                            <th>Deskripsi</th>
+                            <th>Harga</th>
+                            <th>Foto</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($menus as $menu)
+                        <tr>
+                            <td>{{ $menu->nama }}</td>
+                            <td>{{ $menu->deskripsi }}</td>
+                            <td>Rp{{ number_format($menu->harga, 0, ',', '.') }}</td>
+                            <td>
+                                @if($menu->foto)
+                                    <img src="{{ asset('storage/'.$menu->foto) }}" alt="Menu Image" class="img-thumbnail" style="width: 50px; height: 50px;">
+                                @else
+                                    <img src="{{ asset('default-photo.png') }}" alt="Default Foto" class="img-thumbnail" style="width: 50px; height: 50px;">
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('menus.edit', $menu->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this menu item?');">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
-    /* Navbar transparency and text styles */
     .navbar-light {
         background-color: rgba(0, 0, 0, 0.3) !important;
     }
@@ -90,10 +95,10 @@
         transition: all 0.3s ease-in-out;
     }
     .ms-7 {
-        margin-left: 5rem !important; /* Margin lebih besar untuk ul */
+        margin-left: 5rem !important;
     }
     .ms-4 {
-        margin-left: 2.5rem !important; /* Margin lebih besar untuk tombol logout */
+        margin-left: 2.5rem !important;
     }
 </style>
 @endsection
