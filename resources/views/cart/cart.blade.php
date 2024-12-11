@@ -7,6 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+@extends('layouts.dashboard')
+
+@section('content')
+<div class="tab-pane" style="padding-bottom: 50px" role="tabpanel" aria-labelledby="cart-tab">
     <div class="container mt-5">
         <h2 class="text-success">Your Cart</h2>
         
@@ -64,12 +68,14 @@
                     <button type="submit" class="btn btn-success">Order</button>
                 </form>
 
-                    <a href="{{ route('dashboard') }}" class="btn btn-secondary ms-2">Back to Dashboard</a>
                 </div>
             </div>
         @endif
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+@endsection
+
 </body>
 </html>

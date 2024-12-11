@@ -8,9 +8,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+@extends('layouts.dashboard')
+
+@section('content')
+<div class="tab-pane" style="padding-bottom: 50px" role="tabpanel" aria-labelledby="cart-tab">
     <div class="container mt-5">
         <h1 class="mb-4">Riwayat Pesanan</h1>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary ms-2">Back to Dashboard</a>
         <!-- Tabel Riwayat Pesanan -->
         <table class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
@@ -40,5 +43,7 @@
 
     <!-- Skrip JavaScript Bootstrap (Optional, jika kamu membutuhkan interaksi tambahan) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+@endsection
 </body>
 </html>

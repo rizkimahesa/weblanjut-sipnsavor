@@ -1,9 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('content')
+<div class="tab-pane" style="padding-bottom: 50px" role="tabpanel" aria-labelledby="contact-tab">
+
 <div class="container mt-5">
     <h2 class="text-primary mb-4">Status Pesanan Anda</h2>
-    <a href="{{ route('dashboard') }}" class="btn btn-secondary ms-2">Back to Dashboard</a>
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -36,7 +37,8 @@
                             <p class="fw-bold">Menu: <span class="text-muted">{{ $order->menu->nama }}</span></p>
                             <p class="fw-bold">Jumlah: <span class="text-muted">{{ $order->quantity }}</span></p>
                             <p class="fw-bold">Harga: <span class="text-success">Rp{{ number_format($order->total_price, 0, ',', '.') }}</span></p>
-                            
+                            <p class="fw-bold">Tanggal dan Waktu Pemesanan: <span class="text-muted">{{ $order->created_at }}</span></p>
+
                         </div>
                     </div>
 
@@ -56,5 +58,6 @@
             </div>
         @endforeach
     @endif
+</div>
 </div>
 @endsection

@@ -27,7 +27,8 @@
         <label for="password" class="form-label">New Password</label>
         <input type="password" name="password" id="password" class="form-control" required>
     </div>
-
+    <p>Belum Memiliki Akun?<a href="{{ route('register') }}" class="text-decoration-none"> Register</a></p>
+    <a href="{{ route('login') }}" class="text-decoration-none">Kembali</a></p>
     <button type="submit" class="btn btn-success w-100">Reset Password</button>
 </form>
 
