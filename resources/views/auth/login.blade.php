@@ -35,8 +35,8 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <button type="submit" class="btn btn-success">Login</button>
-                    <a href="{{ route('register') }}" class="text-decoration-none">Belum Memiliki Akun? Register</a>
-                </div>
+                    <p>Belum Memiliki Akun?<a href="{{ route('register') }}" class="text-decoration-none"> Register</a></p>
+                    </div>
                 <div class="text-center mt-3">
     <a href="{{ route('password.reset') }}" class="text-decoration-none">Lupa Password?</a>
 </div>
