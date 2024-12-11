@@ -25,7 +25,7 @@
         <div class="text-center mt-5">
             <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode($paymentUrl) }}&size=200x200" alt="QR Code" />
         </div>
-
+        
         <div class="text-center mt-4">
             <a href="{{ route('dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
         </div>

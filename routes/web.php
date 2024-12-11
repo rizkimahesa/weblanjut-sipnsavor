@@ -172,5 +172,7 @@ Route::get('reset-password/{email}', [ResetPasswordController::class, 'showPassw
 Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
 
 
-
+Route::get('/payment', [PaymentController::class, 'showPaymentPage'])->name('payment.page');
+Route::get('/menus/pesanan-user', [HistoryController::class, 'pesananUser'])->name('menus.PesananUser');
+Route::get('/pesanan-user', [HistoryController::class, 'showAllOrders'])->name('menus.PesananUser');
    

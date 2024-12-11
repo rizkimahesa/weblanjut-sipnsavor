@@ -18,4 +18,13 @@ class HistoryController extends Controller
                          ->get();
         return view('history', compact('orders'));
     }
+    public function showAllOrders()
+{
+    // Mengambil seluruh data dari tabel orders beserta relasi
+    $orders = Order::with('menu', 'user')->get();
+
+    // Mengembalikan tampilan PesananUser.blade.php dengan data orders
+    return view('menus.PesananUser', compact('orders'));
+}
+
 }

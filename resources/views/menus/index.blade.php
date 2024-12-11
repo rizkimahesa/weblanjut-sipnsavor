@@ -19,6 +19,9 @@
                     <li class="nav-item">
                         <a class="nav-link text-white rounded-hover" href="{{ route('pesan.index') }}">View Pesan</a>
                     </li>
+                    <li class="nav-item">
+                    <a class="nav-link text-white rounded-hover" href="{{ route('menus.PesananUser') }}">Riwayat pesanan</a>
+                    </li>
                 </ul>
                 <form action="{{ route('logout') }}" method="POST" class="d-flex ms-2">
                     @csrf
